@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	
+	<!-- Appenders -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %5level %logger{36} - %msg%n</pattern>
+		</layout>
+	</appender>
+	
+	 <!-- Application Loggers -->
+	<logger name="com.spring" level="info"/>
+			
+	<!-- 3rdparty Loggers -->
+	<logger name="com.spring.mapper.BoardMapper" level="debug"/>
+		
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core" level="info"/>	
+	
+	<logger name="org.springframework.beans" level="info"/>		
+	
+	<logger name="org.springframework.context" level="info"/>
+		
+	<logger name="org.springframework.web" level="info"/>
+	
+	<!-- root level -->
+	<root level="warn">	 	
+		<appender-ref ref="console"/>		
+	</root>
+</configuration>

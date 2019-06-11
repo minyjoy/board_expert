@@ -1,0 +1,4 @@
+insert into spring_board(bno,title,content,writer)
+(select seq_board.nextVal,title,content,writer from spring_board)
+
+

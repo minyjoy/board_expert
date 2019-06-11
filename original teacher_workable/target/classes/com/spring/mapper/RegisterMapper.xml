@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.RegisterMapper">
+	<select id="selectById" resultType="com.spring.domain.RegisterVO"> <!-- select 일때 resultType -->
+	select * from member2 where userid=#{userid}
+	</select>
+	<insert id="registMember">
+		insert into member2(userid, password, username, gender, email) values(#{userid},#{password},#{name},#{gender},#{email})
+	</insert>
+	<select id="selectMember" resultType="com.spring.domain.AuthInfo">
+		select userid,username from member2 
+		where userid=#{username} and password=#{password}
+	</select>
+	<delete id="deleteMember"> 
+		delete from member2 where userid=#{userid}
+	</delete>	
+	<update id="updateMember">
+		update member2 set password=#{new_password}
+		where userid=#{userid}
+	</update>
+</mapper>

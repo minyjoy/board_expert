@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.BoardMapper">
+	<!-- <insert id="insert">		
+		insert into spring_board(bno,title,content,writer)
+		values(seq_board.nextVal,#{title},#{content},#{writer})
+	</insert>	 -->
+	
+	<!-- 조금 전 삽입이 된 pk 값을 미리 sql을 통해서 처리해 두고 특정한 이름으로 결과를 보관
+		 위의 insert 문은 아래로 대체 해야함.
+		  번 게시글 등록하였습니다를 보여주기 위해 필요
+	 -->
+	<insert id="insertSelectKey">
+	<!-- 주로 pk 값을 미리(before) SQL을 통해서 처리해 두고 특정한 이름으로 결과를 보관 
+		keyProperty : vo에 정의해준 변수명
+	-->	
+		<selectKey keyProperty="bno" order="BEFORE" resultType="int">
+			select seq_board.nextVal from dual		
+		</selectKey>	
+		<!-- 여기서 사용하는 bno는 결국에는 BoardVO가 가지고 있는 getBno()에서 값을 사용 -->	
+		insert into spring_board(bno,title,content,writer)
+		values(#{bno},#{title},#{content},#{writer})
+	</insert>
+		
+	<select id="read" resultType="com.spring.domain.BoardVO">
+	  SELECT bno,title,content,writer,regdate,updatedate
+	  FROM spring_board WHERE bno = #{bno}
+	</select>
+	
+	<update id="update" >
+		update spring_board 
+		set title=#{title}, content=#{content}, writer=#{writer}, updatedate=sysdate
+		where bno=#{bno}
+	</update>	
+	
+	<delete id="delete" >
+		delete from spring_board where bno=#{bno}
+	</delete>	
+	
+	<!-- <select  id="getList" resultType="com.spring.domain.BoardVO">
+		<![CDATA[
+			select *
+			from spring_board
+			where bno>0 order by bno desc
+		]]>
+	</select>	 -->
+	
+	<!-- <select  id="getList" resultType="com.spring.domain.BoardVO">
+		<![CDATA[
+			select bno,title,content,writer,regdate,updatedate
+			from 
+			(
+				select /*+INDEX_DESC(spring_board pk_spring_board) */
+					rownum rn, bno, title, content,writer,regdate,updatedate
+				from spring_board where rownum <= (#{pageNum}*#{amount})) 
+				where rn > (#{pageNum}-1) * #{amount}
+		]]>
+	</select>  -->
+	
+	<select  id="getTotalCount" resultType="int">
+		select count(*)
+		from spring_board	
+		where 
+			<include refid="criteria"></include>	
+		bno>0
+	</select>	
+	<select  id="getListWithPaging" resultType="com.spring.domain.BoardVO">
+		<![CDATA[
+			select bno,title,content,writer,regdate,updatedate,replycnt from(
+				select /*+INDEX_DESC(spring_board pk_spring_board) */ 
+						rownum rn, bno,title,content,writer,regdate,updatedate,replycnt
+				from spring_board
+				where		
+		]]>
+			<include refid="criteria"></include>		
+		<![CDATA[
+			rownum <= #{pageNum} * #{amount} ) where rn > (#{pageNum}-1) * #{amount}
+		]]>
+	</select>	
+	<update id="updateReplyCnt">
+		update spring_board set replyCnt=replyCnt+#{amount} where bno=#{bno}
+	</update>
+	<!-- 동적 SQL 문 추가 : 재사용을 위해 따로 작성 후 필요한 곳에서 include -->
+	<sql id="criteria">
+		<trim prefix="(" suffix =") AND" prefixOverrides="OR">
+			<foreach item='type' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type=='T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='W'.toString()">
+							writer like  '%'||#{keyword}||'%'
+						</when>	
+					</choose>								
+				</trim>			
+			</foreach>		
+		</trim>
+	</sql>
+</mapper>
