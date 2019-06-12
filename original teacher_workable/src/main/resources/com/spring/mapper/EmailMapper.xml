@@ -3,11 +3,11 @@
 <mapper namespace="com.spring.mapper.EmailMapper">
    <!-- id -->
    <select id="getidforEmail" resultType="com.spring.domain.EmailVO">
-     select useremail,userid from member2 where useremail = #{useremail}
+     select email,userid from member2 where email = #{email}
    </select>
    
    <!-- password -->
 	<select id="getpwforEmail" resultType="com.spring.domain.EmailVO">
-		select useremail, userpassword from member2 where useremail = #{useremail}
+		select email, password from member2 where email = #{email}
 	</select>
 </mapper>

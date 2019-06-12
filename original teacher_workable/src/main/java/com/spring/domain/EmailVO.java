@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class EmailVO {
 
-	private String useremail;
+	private String email;
 	private String userid;
-	private String userpassword;
+	private String password;
 	private int choice;
 }

@@ -20,7 +20,7 @@
 				<div>
 					<p>
 						<label>Email</label> <input class="w3-input" type="text"
-							id="useremail" name="useremail" required>
+							id="email" name="email" required>
 					</p>
 					<p class="w3-center">
 						<button type="submit" id=findBtn

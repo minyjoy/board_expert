@@ -40,8 +40,9 @@ public class CommonController {
 	}
 
 	@PostMapping("/logout")
-	public void logoutPost() {
+	public String logoutPost() {
 		log.info("logout 요청");
+		return "redirect:signin";
 	}
 
 	@PostMapping("/login")

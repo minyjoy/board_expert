@@ -72,7 +72,7 @@ public class EmailController {
 		final String user = "minyjoy";
 		final String password = "dpshrdl23";
 
-		String to = vo.getUseremail();
+		String to = vo.getEmail();
 
 		Properties pro = new Properties();
 		pro.put("mail.smtp.host", host);
@@ -89,11 +89,11 @@ public class EmailController {
 			MimeMessage message = new MimeMessage(session);
 			if(vo.getUserid() != null) {
 				message.setSubject(choiceR+" 찾기 결과");				
-				message.setText("<h1>"+vo.getUseremail()+"님의 "+choiceR+"는 "+vo.getUserid()+"입니다.<h1>");
+				message.setText("<h1>"+vo.getEmail()+"님의 "+choiceR+"는 "+vo.getUserid()+"입니다.<h1>");
 			}else
-	        if(vo.getUserpassword() != null) {
+	        if(vo.getPassword() != null) {
 	        	message.setSubject(choiceR+" 찾기 결과");				
-	        	message.setText("<h1>"+vo.getUseremail()+"님의 "+choiceR+"는 "+vo.getUserpassword()+"입니다.<h1>");            	
+	        	message.setText("<h1>"+vo.getEmail()+"님의 "+choiceR+"는 "+vo.getPassword()+"입니다.<h1>");            	
 	        	
 	        }
 			message.setFrom(new InternetAddress(user));
