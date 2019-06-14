@@ -8,8 +8,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.domain.BoardAttachVO;
 import com.spring.domain.BoardVO;
 import com.spring.domain.Criteria;
+import com.spring.domain.LoginVO;
 import com.spring.domain.PageDTO;
 import com.spring.service.BoardService;
 
@@ -37,6 +40,10 @@ public class BoardController {
 		
 	@Inject
 	private BoardService service;
+	
+	@Autowired
+	BCryptPasswordEncoder passEncoder;
+
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public void registGET() {
@@ -68,13 +75,17 @@ public class BoardController {
 	}	
 	
 	@PostMapping("/modify")
-	public String modify(BoardVO vo,@ModelAttribute("cri")Criteria cri,RedirectAttributes rttr) 
+	public String modify(BoardVO vo,@ModelAttribute("cri")Criteria cri,RedirectAttributes rttr, LoginVO vo1) 
 						throws Exception {
 		log.info("게시글 수정 요청....."+cri.getKeyword());
 		
 		if(service.modify(vo)) {		
 			rttr.addFlashAttribute("result", "success");
 		}
+		
+//		vo.get
+//		String inputModify = passEncoder.encode(inputModify);
+		
 		
 		rttr.addAttribute("pageNum", cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());		
